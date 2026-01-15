@@ -9,7 +9,7 @@ class ArticleSummary(BaseModel):
     id: int
     title: str
     description: str
-    thumbnail_url: str
+    thumbnail_key: str
     published_at: date
     view_count: int
     
@@ -23,8 +23,8 @@ class ArticleDetail(BaseModel):
     title: str
     description: str
     content: str
-    original_url: str
-    thumbnail_url: str
+    source_url: str
+    thumbnail_key: str
     published_at: date
     read_time: int
     view_count: int

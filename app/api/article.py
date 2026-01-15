@@ -34,7 +34,7 @@ async def get_article(
         raise HTTPException(status_code=404, detail="Article not found")
     return article
 
-@router.post("/article/upload")
+@router.post("/articles/upload/test")
 async def upload_article_from_url(
     request: ArticleUploadRequest
 ):

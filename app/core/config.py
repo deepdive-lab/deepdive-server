@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str
+    
+    GOOGLE_API_KEY: str
 
     @computed_field
     @property
