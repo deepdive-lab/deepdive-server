@@ -3,9 +3,12 @@ from fastapi import FastAPI
 from app.core.config import settings
 from app.api import article, subscriber
 from app.db.session import init_db, engine
+from graph.prompts import load_prompts
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # 서버 시작 시 프롬프트 로드 (한 번만 실행)
+    load_prompts()
     await init_db()
     yield
     await engine.dispose()
