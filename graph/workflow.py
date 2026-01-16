@@ -2,19 +2,22 @@ from langgraph.graph import StateGraph, START, END
 from graph.main import downloader, translator, summarizer, enhancer, explanator, finisher
 from graph.state import GraphState, GraphInputState, GraphOutputState
 
-workflow = StateGraph(state=GraphState, input_state=GraphInputState, output_state=GraphOutputState)
+graph_builder = StateGraph(GraphState, input_state=GraphInputState, output_state=GraphOutputState)
 
-workflow.add_node("downloader", downloader)
-workflow.add_node("translator", translator)
-workflow.add_node("summarizer", summarizer)
-workflow.add_node("enhancer", enhancer)
-workflow.add_node("explanator", explanator)
-workflow.add_node("finisher", finisher)
+graph_builder.add_node("downloader", downloader)
+graph_builder.add_node("translator", translator)
+graph_builder.add_node("summarizer", summarizer)
+graph_builder.add_node("enhancer", enhancer)
+graph_builder.add_node("explanator", explanator)
+graph_builder.add_node("finisher", finisher)
 
-workflow.add_edge(START, "downloader")
-workflow.add_edge("downloader", ["translator", "summarizer"])
-workflow.add_edge("translator", "enhancer")
-workflow.add_edge("enhancer", "explanator")
-workflow.add_edge("explanator", "finisher")
-workflow.add_edge("summarizer", "finisher")
-workflow.add_edge("finisher", END)
+graph_builder.add_edge(START, "downloader")
+graph_builder.add_edge("downloader", "translator")
+graph_builder.add_edge("translator", "enhancer")
+graph_builder.add_edge("enhancer", "explanator")
+graph_builder.add_edge("explanator", "finisher")
+graph_builder.add_edge("downloader", "summarizer")
+graph_builder.add_edge("summarizer", "finisher")
+graph_builder.add_edge("finisher", END)
+
+graph = graph_builder.compile()

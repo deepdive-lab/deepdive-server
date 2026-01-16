@@ -2,13 +2,13 @@ from typing import TypedDict, Optional
 from datetime import date
 
 class GraphInputState(TypedDict):
-    source_url: str
+    url: str
 
 class GraphOutputState(TypedDict):
     title: Optional[str]
+    author: Optional[str]
     description: Optional[str]
     summary: Optional[str]
-    content: str
     
     thumbnail_key: Optional[str]
 
@@ -16,4 +16,4 @@ class GraphOutputState(TypedDict):
     read_time: Optional[int]
 
 class GraphState(GraphInputState, GraphOutputState):
-    html: Optional[str]
+    content: Optional[str]

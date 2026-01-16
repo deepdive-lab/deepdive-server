@@ -6,6 +6,7 @@ from app.schemas.article import ArticleUploadRequest, ArticleSummary, ArticleDet
 import trafilatura
 from trafilatura.metadata import extract_metadata
 import httpx
+from graph.workflow import graph
 
 router = APIRouter(prefix="/api/v1", tags=["article"])
 
@@ -33,6 +34,14 @@ async def get_article(
     if article is None:
         raise HTTPException(status_code=404, detail="Article not found")
     return article
+
+@router.post("/articles/upload")
+async def upload_article(
+    request: ArticleUploadRequest
+):
+    # TypedDict는 dict이므로 생성자가 없습니다. dict로 전달해야 합니다.
+    response = await graph.ainvoke({"url": request.url})
+    return response
 
 @router.post("/articles/upload/test")
 async def upload_article_from_url(

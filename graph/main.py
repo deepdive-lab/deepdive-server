@@ -1,47 +1,99 @@
 from graph.state import GraphState
 from fastapi import HTTPException
 from graph.utils import build_llm_input
+from trafilatura.metadata import extract_metadata
 from graph.llm import llm
 import trafilatura
+import httpx
 
 async def downloader(state: GraphState):
+    
+    url = state["url"]
+
     try:
-        downloaded = trafilatura.fetch_url(state.source_url)
+        # trafilatura.fetch_url로 가져오기
+        downloaded = trafilatura.fetch_url(url)
+        # trafilatura.fetch_url이 실패하면 httpx로 직접 가져오기
         if downloaded is None:
-            raise HTTPException(status_code=400, detail="Failed to download the article")
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.get(url, follow_redirects=True)
+                response.raise_for_status()
+                downloaded = response.text
+    
+        metadata = extract_metadata(downloaded)
+        
+        # 2. 본문만 딱 집어서 마크다운으로 변환하기
+        markdown_content = trafilatura.extract(
+            downloaded,
+            output_format='markdown',
+            include_tables=True,       # 표도 마크다운으로 포함
+            include_images=True,
+            include_links=True,
+            include_comments=False     # 댓글 제외
+        )
+        
+        if markdown_content is None or markdown_content.strip() == "":
+            raise HTTPException(status_code=400, detail="URL에서 콘텐츠를 추출할 수 없습니다.")
+        
+        # metadata 처리
+        author = ""
+        description = ""
+        thumbnail = ""
+        published_at = ""
+        
+        if metadata:
+            author = metadata.author or ""
+            description = metadata.description or ""
+            thumbnail = metadata.image or ""
+            published_at = metadata.date or ""
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Failed to download the article {str(e)}")
     
     return {
-        "html": downloaded
+        "author": author,
+        "description": description,
+        "thumbnail": thumbnail,
+        "published_at": published_at,
+        "content": markdown_content
     }
 
-async def translator(state: GraphState) -> GraphState:
-    input = build_llm_input(state, "translator")
-    response = llm.ainvoke(input)
-    state.html = response.content
-    return state
+async def translator(state: GraphState):
+    input = build_llm_input(state["content"], "translator")
+    response = await llm.ainvoke(input)
 
-async def summarizer(state: GraphState) -> GraphState:
-    input = build_llm_input(state, "summarizer")
-    response = llm.ainvoke(input)
-    state.html = response.content
-    return state
+    translated_content = response.content
+    return {
+        "content": translated_content
+    }
 
-async def enhancer(state: GraphState) -> GraphState:
-    input = build_llm_input(state, "enhancer")
-    response = llm.ainvoke(input)
-    state.html = response.content
-    return state
+async def summarizer(state: GraphState):
+    input = build_llm_input(state["content"], "summarizer")
+    response = await llm.ainvoke(input)
 
-async def explanator(state: GraphState) -> GraphState:
-    input = build_llm_input(state, "explanator")
-    response = llm.ainvoke(input)
-    state.html = response.content
-    return state
+    summary = response.content
 
-async def finisher(state: GraphState) -> GraphState:
-    input = build_llm_input(state, "finisher")
-    response = llm.ainvoke(input)
-    state.html = response.content
+    return {
+        "summary": summary
+    }
+
+async def enhancer(state: GraphState):
+    input = build_llm_input(state["content"], "enhancer")
+    response = await llm.ainvoke(input)
+    
+    enhanced_content = response.content
+
+    return {
+        "content": enhanced_content
+    }
+
+async def explanator(state: GraphState):
+    input = build_llm_input(state["content"], "explanator")
+    response = await llm.ainvoke(input)
+    
+    explained_content = response.content
+    return {
+        "content": explained_content
+    }
+
+async def finisher(state: GraphState):
     return state

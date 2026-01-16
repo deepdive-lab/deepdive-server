@@ -1,22 +1,16 @@
 from langchain_core.messages import SystemMessage, HumanMessage, BaseMessage
-from graph.state import GraphState
-from typing import List, Dict, Any, Literal
+from graph.prompts import get_prompt
 
-def build_llm_input(state: GraphState, role: Literal["enhancer", "explanator","summarizer","translator"]):
+def build_llm_input(content: str, role: str):
     input : list[BaseMessage] = []
 
-    if role == "enhancer":
-        input.append(SystemMessage(content="You are a helpful assistant that enhances the article."))
-    elif role == "explanator":
-        input.append(SystemMessage(content="You are a helpful assistant that explains the article."))
-    elif role == "summarizer":
-        input.append(SystemMessage(content="You are a helpful assistant that summarizes the article."))
-    elif role == "translator":
-        input.append(SystemMessage(content="You are a helpful assistant that translates the article."))
+    # 메모리에서 캐싱된 프롬프트 가져오기 (File I/O 없음)
+    prompt_content = get_prompt(role)
+    input.append(SystemMessage(content=prompt_content))
 
     input.append(HumanMessage(content=f"""
 <article>
-{state.html}
+{content}
 </article>
 """))
     return input

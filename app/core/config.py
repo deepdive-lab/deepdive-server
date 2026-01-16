@@ -25,5 +25,6 @@ class Settings(BaseSettings):
     
     class Config:
         env_file = ".env"
+        extra = "ignore"  # 정의되지 않은 환경 변수는 무시
 
 settings = Settings()
