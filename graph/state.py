@@ -15,5 +15,5 @@ class GraphOutputState(TypedDict):
     published_at: Optional[date]
     read_time: Optional[int]
 
-class GraphState(GraphInputState, GraphOutputState):
+class GraphState(GraphInputState, GraphOutputState, total=False):
     content: Optional[str]

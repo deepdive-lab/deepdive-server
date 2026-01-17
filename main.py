@@ -1,9 +1,10 @@
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
-from app.core.config import settings
 from app.api import article, subscriber, source
+from contextlib import asynccontextmanager
 from app.db.session import init_db, engine
 from graph.prompts import load_prompts
+from app.core.config import settings
+import app.core.logger as logger
+from fastapi import FastAPI
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

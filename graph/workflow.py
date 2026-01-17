@@ -22,12 +22,14 @@ graph_builder.add_node("explanator", explanator)
 graph_builder.add_node("finisher", finisher)
 
 graph_builder.add_edge(START, "downloader")
-graph_builder.add_edge("downloader", "translator")
 
+# Branch 1
+graph_builder.add_edge("downloader", "translator")
 graph_builder.add_edge("translator", "enhancer")
 graph_builder.add_edge("enhancer", "explanator")
 graph_builder.add_edge("explanator", "finisher")
 
+# Branch 2
 graph_builder.add_edge("downloader", "summarizer")
 graph_builder.add_edge("summarizer", "finisher")
 

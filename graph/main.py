@@ -106,4 +106,4 @@ async def explanator(state: GraphState):
 async def finisher(state: GraphState):
     logger.debug(f"Finisher state: {state}")
     
-    return state
+    return {}

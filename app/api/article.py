@@ -3,9 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.crud import article as crud_article
 from app.schemas.article import ArticleUploadRequest, ArticleSummary, ArticleDetail
-import trafilatura
-from trafilatura.metadata import extract_metadata
-import httpx
 from graph.workflow import graph
 
 router = APIRouter(prefix="/api/v1", tags=["article"])
