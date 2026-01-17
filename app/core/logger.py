@@ -27,7 +27,7 @@ formatter = logging.Formatter(
 request_id_filter = RequestIdFilter()
 
 # DEBUG
-debug_handler = logging.FileHandler("./log/debug.log")
+debug_handler = logging.FileHandler("./logs/debug.log")
 debug_handler.setLevel(logging.DEBUG)
 debug_handler.setFormatter(formatter)
 debug_handler.addFilter(request_id_filter)
@@ -35,7 +35,7 @@ debug_handler.addFilter(LevelFilter(logging.DEBUG))
 root_logger.addHandler(debug_handler)
 
 # INFO
-info_handler = logging.FileHandler("./log/info.log")
+info_handler = logging.FileHandler("./logs/info.log")
 info_handler.setLevel(logging.INFO)
 info_handler.setFormatter(formatter)
 info_handler.addFilter(request_id_filter)
@@ -43,7 +43,7 @@ info_handler.addFilter(LevelFilter(logging.INFO))
 root_logger.addHandler(info_handler)
 
 # WARNING
-warning_handler = logging.FileHandler("./log/warning.log")
+warning_handler = logging.FileHandler("./logs/warning.log")
 warning_handler.setLevel(logging.WARNING)
 warning_handler.setFormatter(formatter)
 warning_handler.addFilter(request_id_filter)
@@ -51,7 +51,7 @@ warning_handler.addFilter(LevelFilter(logging.WARNING))
 root_logger.addHandler(warning_handler)
 
 # ERROR
-error_handler = logging.FileHandler("./log/error.log")
+error_handler = logging.FileHandler("./logs/error.log")
 error_handler.setLevel(logging.ERROR)
 error_handler.setFormatter(formatter)
 error_handler.addFilter(request_id_filter)
