@@ -4,7 +4,10 @@ from graph.utils import build_llm_input
 from trafilatura.metadata import extract_metadata
 from graph.llm import llm
 import trafilatura
+import logging
 import httpx
+
+logger = logging.getLogger(__name__)
 
 async def downloader(state: GraphState):
     
@@ -72,6 +75,8 @@ async def summarizer(state: GraphState):
 
     summary = response.content
 
+    logger.debug(f"Summary: {summary}")
+
     return {
         "summary": summary
     }
@@ -92,9 +97,13 @@ async def explanator(state: GraphState):
     
     explained_content = response.content
 
+    logger.debug(f"Explained content: {explained_content}")
+
     return {
         "content": explained_content
     }
 
 async def finisher(state: GraphState):
+    logger.debug(f"Finisher state: {state}")
+    
     return state

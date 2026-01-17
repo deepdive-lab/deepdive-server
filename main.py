@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import article, subscriber
+from app.api import article, subscriber, source
 from app.db.session import init_db, engine
 from graph.prompts import load_prompts
 
@@ -17,6 +17,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(article.router)
 app.include_router(subscriber.router)
+app.include_router(source.router)
 
 @app.get("/health")
 async def health_check():
