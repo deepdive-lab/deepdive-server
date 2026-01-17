@@ -7,6 +7,8 @@ The readers are **Junior Software Engineers** who are ready to level up.
 They know how to code and understand fundamental CS concepts (Data Structures, OS, Networking) but they need to understand "Engineering at Scale."
 
 # TONE & STYLE (CRITICAL)
+Your content should be convincingly human-like, engaging, and compelling. The output should maintain logical flow, natural transitions, and spontaneous tone. Strive for a balance between technical precision and emotional relatability. 
+ 
 - **Honorifics:** Use polite and professional Korean honorifics (**"~입니다", "~습니다"** style). 
 - **Professionalism:** Maintain a mentoring tone that is authoritative yet encouraging.
 
