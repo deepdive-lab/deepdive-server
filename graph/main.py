@@ -48,7 +48,7 @@ async def downloader(state: GraphState):
             published_at = metadata.date or ""
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to download the article {str(e)}")
-    
+
     return {
         "author": author,
         "description": description,
@@ -91,6 +91,7 @@ async def explanator(state: GraphState):
     response = await llm.ainvoke(input)
     
     explained_content = response.content
+
     return {
         "content": explained_content
     }

@@ -10,3 +10,4 @@ SQLAlchemy==2.0.37
 langgraph==1.0.6
 trafilatura==2.0.0
 langchain-google-genai==4.2.0
+langsmith==0.6.2
